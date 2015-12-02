@@ -1,0 +1,181 @@
+-- $ProjectHeader: use 0.393 Wed, 02 Nov 2015 10:00:28 +0200 opti $
+
+model ER13
+
+-- classes
+
+class Date
+attributes
+  dia : Integer
+  mes : Integer
+  any : Integer
+operations
+  esPosteriorA(d : Date) : Boolean = 
+    (self.any > d.any or
+     self.any = d.any and self.mes > d.mes or
+     self.any = d.any and self.mes = self.mes and self.dia > d.dia)
+  esAnteriorA(d : Date) : Boolean = 
+    (self.any < d.any or
+     self.any = d.any and self.mes < d.mes or
+     self.any = d.any and self.mes = self.mes and self.dia < d.dia)
+  esIgualA(d : Date) : Boolean = 
+    (self.any = d.any and
+     self.mes = d.mes and
+     self.dia = d.dia)
+end
+          
+class Usuari
+attributes
+  dni : String
+  email : String
+  nom : String
+  contrasenya : String
+  dataDeAlta : Date
+end
+
+class Pacient < Usuari
+attributes
+  horaDeApat : Integer
+  estaSubscrit : Boolean
+  dataDeUltimPagament : Date
+  dataDeCaducitatDelServei : Date
+  numeroDeCompteBancari : String
+end
+
+class PersonalSanitari < Usuari
+attributes
+
+end
+
+class Cuidador < PersonalSanitari
+attributes
+
+end
+
+class Metge < PersonalSanitari
+attributes
+
+end
+
+class Farmacia < Usuari
+attributes
+  localitzacio : String
+end
+
+class Tractament
+attributes
+  durada : Integer
+end
+
+class Medicament 
+attributes
+  codi : Integer
+  nom : String
+end
+
+class MedicamentDeUnTractament 
+attributes
+  periodicitat : Integer
+  dosiEnMG : Integer
+end
+
+class Stock
+attributes
+  quantitat : Integer
+end
+
+class Notificacio
+attributes
+  missatge : String
+end
+
+class AvisDePresa < Notificacio
+attributes
+  data : Date
+  haPresLaMedicacio : Boolean
+end
+
+class AvisDeSeguiment < Notificacio
+attributes
+  
+end
+
+class AvisDeStock < Notificacio
+attributes
+  
+end
+
+class Promocio
+attributes
+  oferta : String
+  dataInici : Date
+  dataFi : Date
+end
+
+-- associations
+
+association SegueixA between
+  PersonalSanitari[*]
+  Pacient[1..*]
+end
+
+association Conte between
+  Tractament[1]
+  MedicamentDeUnTractament[*]
+end
+
+association EstaA between
+  Medicament[1]
+  MedicamentDeUnTractament[*]
+end
+
+association Segueix between
+  Pacient[*]
+  Tractament[*]
+end
+
+association Disposa between
+  Pacient[1]
+  Stock[*]
+end
+
+association FormaPartDe between
+  Medicament[1]
+  Stock[*]
+end
+
+association EsAvisatPer between
+  Pacient[1]
+  Notificacio[*]
+end
+
+association Rep between
+  Metge[*]
+  AvisDeSeguiment[*]
+end
+
+association LiArriba between
+  Cuidador[*]
+  AvisDeSeguiment[*]
+end
+
+association Utilitza between
+  Tractament[1]
+  AvisDePresa[*]
+end
+
+association EsAlarmatPer between
+  Stock[1]
+  AvisDeStock[*]
+end
+
+association Oferta between
+  Farmacia[*]
+  Promocio[*]
+end
+
+-- OCL constraints
+
+constraints
+
+
