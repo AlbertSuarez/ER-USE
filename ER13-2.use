@@ -59,7 +59,7 @@ end
 
 class Farmacia < Usuari
 attributes
-  localitzacio : String
+  adreca : String
 end
 
 class Tractament
@@ -71,17 +71,6 @@ class Medicament
 attributes
   codi : Integer
   nom : String
-end
-
-class MedicamentDeUnTractament 
-attributes
-  periodicitat : Integer
-  dosiEnMG : Integer
-end
-
-class Stock
-attributes
-  quantitat : Integer
 end
 
 class Notificacio
@@ -108,8 +97,25 @@ end
 class Promocio
 attributes
   oferta : String
-  dataInici : Date
-  dataFi : Date
+  dataDeInici : Date
+  dataDeFi : Date
+end
+
+-- association classes
+
+associationclass Medicacio between
+   Medicament[*]
+   Tractament[*]
+attributes
+   periodicitat : Integer
+   dosiEnMG : Integer
+end
+
+associationclass Stock between
+   Medicament[*]
+   Pacient[*]
+attributes
+  quantitat : Integer
 end
 
 -- associations
@@ -119,29 +125,11 @@ association SegueixA between
   Pacient[1..*]
 end
 
-association Conte between
-  Tractament[1]
-  MedicamentDeUnTractament[*]
-end
 
-association EstaA between
-  Medicament[1]
-  MedicamentDeUnTractament[*]
-end
 
 association Segueix between
   Pacient[*]
   Tractament[*]
-end
-
-association Disposa between
-  Pacient[1]
-  Stock[*]
-end
-
-association FormaPartDe between
-  Medicament[1]
-  Stock[*]
 end
 
 association EsAvisatPer between
@@ -150,26 +138,22 @@ association EsAvisatPer between
 end
 
 association Rep between
-  Metge[*]
+  PersonalSanitari[*]
   AvisDeSeguiment[*]
 end
 
-association LiArriba between
-  Cuidador[*]
-  AvisDeSeguiment[*]
-end
 
-association Utilitza between
+association InformaSobre between
   Tractament[1]
   AvisDePresa[*]
 end
 
-association EsAlarmatPer between
+association NotificaSobre between
   Stock[1]
   AvisDeStock[*]
 end
 
-association Oferta between
+association Ofereix between
   Farmacia[*]
   Promocio[*]
 end
