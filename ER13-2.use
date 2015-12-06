@@ -162,4 +162,52 @@ end
 
 constraints
 
+context Usuari
+	-- Dos usuaris no poden tenir el mateix email 
+	inv teUnEmailUnic:
+		Usuari.allInstances()->isUnique(email) 
+
+	-- Una contrasenya no pot tenir menys de 8caràcters 
+	inv teUnaContrasenyaAmbMidaDeterminada: 
+		self.contrasenya.size()>8 
+
+	-- NI ZORRA COM FER AQUEST
+
+	-- Un usuari no pot rebre un avis abans de donar-se d’alta 
+	--inv seHaDonatDeAltaAbansDeRebreUnAvis: 
+		--not Pacient.allInstances()->exists(p | p.dataDeAlta.EsAnteriorA(p.notificacio.oclAsType(AvisDePresa).data))
+		
+context Farmacia
+
+	-- La data d’inici d’una promoció ha de ser major o igual que la data d’alta de la farmacia 
+	inv teDataDeAltaAnteriorALaDataDeIniciDeLaPromocio: 
+		not self.promocio->exists(p | p.dataDeInici.esPosteriorA(self.dataDeAlta))
+
+context Promocio 
+
+	-- La data d’inici ha de ser menor que la data de fi
+	inv teDataDeFiPosteriorALaDataDeInici:
+		self.dataDeFi.esPosteriorA(self.dataDeInici)
+		
+context Pacient
+
+	-- La hora del Apat ha de contenir hores del 0 al 23h
+	inv teUnaHoraDeApatReal:
+		self.horaDeApat >= 0 or self.horaDeApat <= 23
+
+	-- La data de Ultim Pagament no pot ser anterior a la data de Alta
+	inv	teUnaDataDeUltimPagamentPosteriorALaDataDeAlta:
+		self.dataDeUltimPagament <> null and (self.dataDeUltimPagament.esPosteriorA(self.dataDeAlta) or self.dataDeUltimPagament.esIgualA(self.dataDeAlta))
+
+	-- Un pacient subscrit ha de tenir data de pagament i compte bancari
+	inv teDataDePagamentINumeroDeCompteSiEstaSubscrit:
+		self.estaSubscrit and self.dataDeUltimPagament <> null and self.numeroDeCompteBancari <> null
+
+	-- La data de Caducitat del Servei no pot ser anterior a la data de Alta
+	inv	teLaDataDeCaducitatDelServeiPosteriorALaDataAlta:
+		self.dataDeCaducitatDelServei.esPosteriorA(self.dataDeAlta) or self.dataDeCaducitatDelServei.esIgualA(self.dataDeAlta)
+
+	-- La data de Caducitat del servei no pot ser anterior a la data de pagament
+	inv	teLaDataDeCaducitatPosteriorALaDataDePagament:
+		self.dataDeUltimPagament <> null and self.dataDeUltimPagament.esAnteriorA(self.dataDeCaducitatDelServei)
 
