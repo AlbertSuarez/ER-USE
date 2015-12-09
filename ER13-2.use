@@ -121,8 +121,8 @@ end
 -- associations
 
 association SegueixA between
-  PersonalSanitari[*]
-  Pacient[1..*]
+  PersonalSanitari[*] role personalsanitari
+  Pacient[1..*]	role pacient
 end
 
 
@@ -138,8 +138,8 @@ association EsAvisatPer between
 end
 
 association Rep between
-  PersonalSanitari[*]
-  AvisDeSeguiment[*]
+  PersonalSanitari[*] role personalsanitari
+  AvisDeSeguiment[*] role avisdeseguiment
 end
 
 
@@ -175,7 +175,12 @@ context Usuari
 
 	-- Un usuari no pot rebre un avis abans de donar-se d’alta 
 	--inv seHaDonatDeAltaAbansDeRebreUnAvis: 
-		--not Pacient.allInstances()->exists(p | p.dataDeAlta.EsAnteriorA(p.notificacio.oclAsType(AvisDePresa).data))
+		--not Pacient.allInstances()->exists(p | p.dataDeAlta.esAnteriorA(p.notificacio.oclAsType(AvisDePresa).data))
+		--Pacient.allInstances()-> forAll (p| p.dataDeAlta.esAnteriorA( (p.notificacio.oclAsType(AvisDePresa).data)))
+		--not Pacient.allInstances() -> exists (p| p.notificacio.oclAsType(AvisDePresa).data) -> exists (data.esPosteriorA(p.oclAsType(Usuari).dataDeAlta))
+		--includes (data.esPosteriorA(p.oclAsType(Usuari).dataDeAlta))
+		
+		--notificacio.oclAsType(AvisDePresa).tractament = p.tractament)
 		
 context Farmacia
 
@@ -210,4 +215,40 @@ context Pacient
 	-- La data de Caducitat del servei no pot ser anterior a la data de pagament
 	inv	teLaDataDeCaducitatPosteriorALaDataDePagament:
 		self.dataDeUltimPagament <> null and self.dataDeUltimPagament.esAnteriorA(self.dataDeCaducitatDelServei)
+		
+context Tractament
+
+	-- La durada ha de ser positiva
+	inv teLaDuradaPositiva:
+		self.durada >= 0
+
+context Medicacio
+
+	-- La periodicitat ha de ser positiva
+	inv teLaPeriodicitatPositiva:
+		self.periodicitat > 0
+
+	-- La dosi en mg ha de ser positiva
+	inv teLaDosiEnMGPositiva:
+		self.dosiEnMG > 0
+
+context Stock
+
+	-- La quantitat no pot ser negativa
+	inv teLaQuantitatPositiva:
+		self.quantitat >= 0
+
+-- Inv de Associacions	
+
+	-- Un pacient ha de ser avisat només per una notificació que utilitza el mateix tractament que segueix el pacient
+	context Pacient inv esAvisatPelTractamentQueSegueix:
+		Pacient.allInstances() -> forAll (p| p.notificacio.oclAsType(AvisDePresa).tractament = p.tractament)
+		
+	-- Un pacient nomes serà alarmat de la falta del stock que disposa ell
+	context Pacient inv esAvisatDelSeuStock:
+		Pacient.allInstances() -> forAll (p| p.notificacio.oclAsType(AvisDeStock).stock = p.stock)
+
+	-- Un pacient nomes enviarà avisos de seguiment al personal sanitari que el segueixi
+		context PersonalSanitari inv esAvisatDelPacientQueSegueix:
+		Pacient.allInstances() -> forAll (p| p.notificacio.oclAsType(AvisDeSeguiment).personalsanitari = p.personalsanitari)
 
