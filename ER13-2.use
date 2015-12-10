@@ -42,6 +42,8 @@ attributes
   dataDeUltimPagament : Date
   dataDeCaducitatDelServei : Date
   numeroDeCompteBancari : String
+  urlICal : String
+  clauDAutentificacioGoogle : String
 end
 
 class PersonalSanitari < Usuari
@@ -113,6 +115,20 @@ attributes
    dosiEnMG : Integer
 end
 
+associationclass Missatge between
+  Usuari [*] role remitent
+  Seguiment[*] role conversacio
+attributes
+  cos : String
+end
+
+associationclass Seguiment between
+   Pacient[*] role pacient
+   PersonalSanitari[*] role personalSanitari
+attributes
+
+end
+
 associationclass Stock between
    Medicament[*]
    Pacient[*]
@@ -121,11 +137,6 @@ attributes
 end
 
 -- associations
-
-association SegueixA between
-  PersonalSanitari[*] role personalsanitari
-  Pacient[1..*]	role pacient
-end
 
 association Fa between
   Pacient[*]
@@ -232,6 +243,12 @@ context Notificacio
 
 inv recordatorisInferiorAMaxim:
   self.nombreDeRecordatoris < self.nombreMaximDeRecordatoris
+
+
+context Missatge
+
+inv remitentMisatgeASeguiment:
+  self.remitent = self.conversacio.pacient or self.remitent = self.conversacio.personalSanitari
 
 -- Inv de Associacions
 
