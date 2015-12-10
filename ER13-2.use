@@ -10,20 +10,20 @@ attributes
   mes : Integer
   any : Integer
 operations
-  esPosteriorA(d : Date) : Boolean = 
+  esPosteriorA(d : Date) : Boolean =
     (self.any > d.any or
      self.any = d.any and self.mes > d.mes or
      self.any = d.any and self.mes = self.mes and self.dia > d.dia)
-  esAnteriorA(d : Date) : Boolean = 
+  esAnteriorA(d : Date) : Boolean =
     (self.any < d.any or
      self.any = d.any and self.mes < d.mes or
      self.any = d.any and self.mes = self.mes and self.dia < d.dia)
-  esIgualA(d : Date) : Boolean = 
+  esIgualA(d : Date) : Boolean =
     (self.any = d.any and
      self.mes = d.mes and
      self.dia = d.dia)
 end
-          
+
 class Usuari
 attributes
   dni : String
@@ -31,6 +31,7 @@ attributes
   nom : String
   contrasenya : String
   dataDeAlta : Date
+  estaConectat : Boolean
 end
 
 class Pacient < Usuari
@@ -67,7 +68,7 @@ attributes
   durada : Integer
 end
 
-class Medicament 
+class Medicament
 attributes
   codi : Integer
   nom : String
@@ -76,27 +77,13 @@ end
 class Notificacio
 attributes
   missatge : String
-end
-
-class AvisDePresa < Notificacio
-attributes
+  estaConfirmat : Boolean
   data : Date
-  haPresLaMedicacio : Boolean
-end
-
-class AvisDeSeguiment < Notificacio
-attributes
-  
-end
-
-class AvisDeStock < Notificacio
-attributes
-  
 end
 
 class Promocio
 attributes
-  oferta : String
+  nom : String
   dataDeInici : Date
   dataDeFi : Date
 end
@@ -132,25 +119,9 @@ association Segueix between
   Tractament[*]
 end
 
-association EsAvisatPer between
-  Pacient[1]
-  Notificacio[*]
-end
-
 association Rep between
-  PersonalSanitari[*] role personalsanitari
-  AvisDeSeguiment[*] role avisdeseguiment
-end
-
-
-association InformaSobre between
-  Tractament[1]
-  AvisDePresa[*]
-end
-
-association NotificaSobre between
-  Stock[1]
-  AvisDeStock[*]
+  Usuari[1]
+  Notificacio[*]
 end
 
 association Ofereix between
@@ -163,37 +134,37 @@ end
 constraints
 
 context Usuari
-	-- Dos usuaris no poden tenir el mateix email 
+	-- Dos usuaris no poden tenir el mateix email
 	inv teUnEmailUnic:
-		Usuari.allInstances()->isUnique(email) 
+		Usuari.allInstances()->isUnique(email)
 
-	-- Una contrasenya no pot tenir menys de 8caràcters 
-	inv teUnaContrasenyaAmbMidaDeterminada: 
-		self.contrasenya.size()>8 
+	-- Una contrasenya no pot tenir menys de 8caràcters
+	inv teUnaContrasenyaAmbMidaDeterminada:
+		self.contrasenya.size()>8
 
 	-- NI ZORRA COM FER AQUEST
 
-	-- Un usuari no pot rebre un avis abans de donar-se d’alta 
-	--inv seHaDonatDeAltaAbansDeRebreUnAvis: 
+	-- Un usuari no pot rebre un avis abans de donar-se d’alta
+	--inv seHaDonatDeAltaAbansDeRebreUnAvis:
 		--not Pacient.allInstances()->exists(p | p.dataDeAlta.esAnteriorA(p.notificacio.oclAsType(AvisDePresa).data))
 		--Pacient.allInstances()-> forAll (p| p.dataDeAlta.esAnteriorA( (p.notificacio.oclAsType(AvisDePresa).data)))
 		--not Pacient.allInstances() -> exists (p| p.notificacio.oclAsType(AvisDePresa).data) -> exists (data.esPosteriorA(p.oclAsType(Usuari).dataDeAlta))
 		--includes (data.esPosteriorA(p.oclAsType(Usuari).dataDeAlta))
-		
+
 		--notificacio.oclAsType(AvisDePresa).tractament = p.tractament)
-		
+
 context Farmacia
 
-	-- La data d’inici d’una promoció ha de ser major o igual que la data d’alta de la farmacia 
-	inv teDataDeAltaAnteriorALaDataDeIniciDeLaPromocio: 
+	-- La data d’inici d’una promoció ha de ser major o igual que la data d’alta de la farmacia
+	inv teDataDeAltaAnteriorALaDataDeIniciDeLaPromocio:
 		not self.promocio->exists(p | p.dataDeInici.esPosteriorA(self.dataDeAlta))
 
-context Promocio 
+context Promocio
 
 	-- La data d’inici ha de ser menor que la data de fi
 	inv teDataDeFiPosteriorALaDataDeInici:
 		self.dataDeFi.esPosteriorA(self.dataDeInici)
-		
+
 context Pacient
 
 	-- La hora del Apat ha de contenir hores del 0 al 23h
@@ -215,7 +186,7 @@ context Pacient
 	-- La data de Caducitat del servei no pot ser anterior a la data de pagament
 	inv	teLaDataDeCaducitatPosteriorALaDataDePagament:
 		self.dataDeUltimPagament <> null and self.dataDeUltimPagament.esAnteriorA(self.dataDeCaducitatDelServei)
-		
+
 context Tractament
 
 	-- La durada ha de ser positiva
@@ -238,17 +209,16 @@ context Stock
 	inv teLaQuantitatPositiva:
 		self.quantitat >= 0
 
--- Inv de Associacions	
+-- Inv de Associacions
 
 	-- Un pacient ha de ser avisat només per una notificació que utilitza el mateix tractament que segueix el pacient
-	context Pacient inv esAvisatPelTractamentQueSegueix:
-		Pacient.allInstances() -> forAll (p| p.notificacio.oclAsType(AvisDePresa).tractament = p.tractament)
-		
+	--context Pacient inv esAvisatPelTractamentQueSegueix:
+		--Pacient.allInstances() -> forAll (p| p.notificacio.oclAsType(AvisDePresa).tractament = p.tractament)
+
 	-- Un pacient nomes serà alarmat de la falta del stock que disposa ell
-	context Pacient inv esAvisatDelSeuStock:
-		Pacient.allInstances() -> forAll (p| p.notificacio.oclAsType(AvisDeStock).stock = p.stock)
+	--context Pacient inv esAvisatDelSeuStock:
+		--Pacient.allInstances() -> forAll (p| p.notificacio.oclAsType(AvisDeStock).stock = p.stock)
 
 	-- Un pacient nomes enviarà avisos de seguiment al personal sanitari que el segueixi
-		context PersonalSanitari inv esAvisatDelPacientQueSegueix:
-		Pacient.allInstances() -> forAll (p| p.notificacio.oclAsType(AvisDeSeguiment).personalsanitari = p.personalsanitari)
-
+		--context PersonalSanitari inv esAvisatDelPacientQueSegueix:
+		--Pacient.allInstances() -> forAll (p| p.notificacio.oclAsType(AvisDeSeguiment).personalsanitari = p.personalsanitari)
