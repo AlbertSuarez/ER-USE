@@ -32,6 +32,7 @@ attributes
   contrasenya : String
   dataDeAlta : Date
   estaConectat : Boolean
+
 end
 
 class Pacient < Usuari
@@ -55,7 +56,7 @@ end
 
 class Metge < PersonalSanitari
 attributes
-
+  idententificacioSanitaria : Integer
 end
 
 class Farmacia < Usuari
@@ -79,6 +80,9 @@ attributes
   missatge : String
   estaConfirmat : Boolean
   data : Date
+  tempsAjornament : Integer
+  nombreDeRecordatoris : Integer
+  nombreMaximDeRecordatoris : Integer
 end
 
 class Promocio
@@ -87,6 +91,17 @@ attributes
   dataDeInici : Date
   dataDeFi : Date
 end
+
+class Apat
+attributes
+  hora : Integer
+  tipus : TipusApat
+end
+
+
+--Enumerations
+
+enum TipusApat {Esmorzar, Dinar, Sopar}
 
 -- association classes
 
@@ -112,7 +127,10 @@ association SegueixA between
   Pacient[1..*]	role pacient
 end
 
-
+association Fa between
+  Pacient[*]
+  Apat[*]
+end
 
 association Segueix between
   Pacient[*]
@@ -208,6 +226,12 @@ context Stock
 	-- La quantitat no pot ser negativa
 	inv teLaQuantitatPositiva:
 		self.quantitat >= 0
+
+
+context Notificacio
+
+inv recordatorisInferiorAMaxim:
+  self.nombreDeRecordatoris < self.nombreMaximDeRecordatoris
 
 -- Inv de Associacions
 
