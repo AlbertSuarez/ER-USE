@@ -199,8 +199,6 @@ context Apat
 	inv teUnaHoraDeApatReal:
 		self.hora >= 0 or self.hora <= 23
 
-context Pacient
-
 	-- La data de Ultim Pagament no pot ser anterior a la data de Alta
 	inv	teUnaDataDeUltimPagamentPosteriorALaDataDeAlta:
 		self.dataDeUltimPagament <> null and (self.dataDeUltimPagament.esPosteriorA(self.dataDeAlta) or self.dataDeUltimPagament.esIgualA(self.dataDeAlta))
