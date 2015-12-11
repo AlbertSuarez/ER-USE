@@ -83,27 +83,30 @@
 !new Date('date2')
 !new Date('date3')
 !new Date('date4')
-!new Date('date5')
-!new Date('date6')
 !date1.dia := 1
 !date1.mes := 12
 !date1.any := 2015
+!date1.hora := 13
+!date1.minut :=21
+!date1.segon := 56
 !date2.dia := 2
 !date2.mes := 12
 !date2.any := 2015
+!date2.hora := 17
+!date2.minut :=44
+!date2.segon := 09
 !date3.dia := 2
 !date3.mes := 12
 !date3.any := 2016
+!date3.hora := 09
+!date3.minut :=12
+!date3.segon := 59
 !date4.dia := 3
 !date4.mes := 12
-!date4.any := 2016
-!date5.dia := 5
-!date5.mes := 12
-!date5.any := 2015
+!date3.hora := 09
+!date3.minut :=12
+!date3.segon := 59
 !date4.any := 2015
-!date6.dia := 8
-!date6.mes := 12
-!date6.any := 2016
 !pacient1.dataDeUltimPagament := date2
 !pacient1.dataDeCaducitatDelServei := date3
 !promocio1.dataDeInici := date2
@@ -115,8 +118,6 @@
 !notificacio2.data := date4
 !notificacio3.missatge := 'Ha oblidat 5 dosis'
 !notificacio3.data := date4
-!destroy date5
-!destroy date6
 !date4.dia := 10
 !promocio1.dataDeInici := date4
 !promocio1.dataDeInici := date2

@@ -9,19 +9,31 @@ attributes
   dia : Integer
   mes : Integer
   any : Integer
+  hora : Integer
+  minut : Integer
+  segon : Integer
 operations
   esPosteriorA(d : Date) : Boolean =
     (self.any > d.any or
      self.any = d.any and self.mes > d.mes or
-     self.any = d.any and self.mes = self.mes and self.dia > d.dia)
+     self.any = d.any and self.mes = self.mes and self.dia > d.dia or
+     self.any = d.any and self.mes = self.mes and self.dia = d.dia and self.hora > d.hora or
+     self.any = d.any and self.mes = self.mes and self.dia = d.dia and self.hora = d.hora and self.minut > d.minut or
+     self.any = d.any and self.mes = self.mes and self.dia = d.dia and self.hora = d.hora and self.minut = d.minut and self.segon > d.segon)
   esAnteriorA(d : Date) : Boolean =
     (self.any < d.any or
      self.any = d.any and self.mes < d.mes or
-     self.any = d.any and self.mes = self.mes and self.dia < d.dia)
+     self.any = d.any and self.mes = self.mes and self.dia < d.dia or
+     self.any = d.any and self.mes = self.mes and self.dia = d.dia and self.hora < d.hora or
+     self.any = d.any and self.mes = self.mes and self.dia = d.dia and self.hora = d.hora and self.minut < d.minut or
+     self.any = d.any and self.mes = self.mes and self.dia = d.dia and self.hora = d.hora and self.minut = d.minut and self.segon < d.segon)
   esIgualA(d : Date) : Boolean =
     (self.any = d.any and
      self.mes = d.mes and
-     self.dia = d.dia)
+     self.dia = d.dia and
+     self.hora = d.hora and
+     self.minut = d.minut and
+     self.segon = d.segon)
 end
 
 class Usuari
@@ -58,6 +70,11 @@ end
 class Metge < PersonalSanitari
 attributes
   idententificacioSanitaria : Integer
+end
+
+class NotificacioMedicacio < Notificacio
+attributes
+
 end
 
 class Farmacia < Usuari
