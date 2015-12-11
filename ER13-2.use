@@ -185,7 +185,7 @@ context Farmacia
 
 	-- La data d’inici d’una promoció ha de ser major o igual que la data d’alta de la farmacia
 	inv teDataDeAltaAnteriorALaDataDeIniciDeLaPromocio:
-		not self.promocio->exists(p | p.dataDeInici.esPosteriorA(self.dataDeAlta))
+		not self.promocio->exists(p | p.dataDeInici.esAnteriorA(self.dataDeAlta))
 
 context Promocio
 
