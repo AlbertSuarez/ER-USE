@@ -149,7 +149,7 @@ end
 
 association Rep between
   Usuari[1]
-  Notificacio[*]
+  Notificacio[*] role notificacions
 end
 
 association Ofereix between
@@ -170,16 +170,10 @@ context Usuari
 	inv teUnaContrasenyaAmbMidaDeterminada:
 		self.contrasenya.size()>8
 
-	-- NI ZORRA COM FER AQUEST
-
 	-- Un usuari no pot rebre un avis abans de donar-se d’alta
-	--inv seHaDonatDeAltaAbansDeRebreUnAvis:
-		--not Pacient.allInstances()->exists(p | p.dataDeAlta.esAnteriorA(p.notificacio.oclAsType(AvisDePresa).data))
-		--Pacient.allInstances()-> forAll (p| p.dataDeAlta.esAnteriorA( (p.notificacio.oclAsType(AvisDePresa).data)))
-		--not Pacient.allInstances() -> exists (p| p.notificacio.oclAsType(AvisDePresa).data) -> exists (data.esPosteriorA(p.oclAsType(Usuari).dataDeAlta))
-		--includes (data.esPosteriorA(p.oclAsType(Usuari).dataDeAlta))
-
-		--notificacio.oclAsType(AvisDePresa).tractament = p.tractament)
+	inv seHaDonatDeAltaAbansDeRebreUnAvis:
+		not self.notificacions->exists(n | n.data.esAnteriorA(self.dataDeAlta))
+		
 
 context Farmacia
 
@@ -252,15 +246,3 @@ inv remitentMisatgeASeguiment:
   self.remitent = self.conversacio.pacient or self.remitent = self.conversacio.personalSanitari
 
 -- Inv de Associacions
-
-	-- Un pacient ha de ser avisat només per una notificació que utilitza el mateix tractament que segueix el pacient
-	--context Pacient inv esAvisatPelTractamentQueSegueix:
-		--Pacient.allInstances() -> forAll (p| p.notificacio.oclAsType(AvisDePresa).tractament = p.tractament)
-
-	-- Un pacient nomes serà alarmat de la falta del stock que disposa ell
-	--context Pacient inv esAvisatDelSeuStock:
-		--Pacient.allInstances() -> forAll (p| p.notificacio.oclAsType(AvisDeStock).stock = p.stock)
-
-	-- Un pacient nomes enviarà avisos de seguiment al personal sanitari que el segueixi
-		--context PersonalSanitari inv esAvisatDelPacientQueSegueix:
-		--Pacient.allInstances() -> forAll (p| p.notificacio.oclAsType(AvisDeSeguiment).personalsanitari = p.personalsanitari)
