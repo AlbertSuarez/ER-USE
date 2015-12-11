@@ -72,11 +72,6 @@ attributes
   idententificacioSanitaria : Integer
 end
 
-class NotificacioMedicacio < Notificacio
-attributes
-
-end
-
 class Farmacia < Usuari
 attributes
   adreca : String
@@ -96,11 +91,15 @@ end
 class Notificacio
 attributes
   missatge : String
-  estaConfirmat : Boolean
   data : Date
+end
+
+class NotificacioDeMedicament < Notificacio
+attributes
+  estaConfirmat : Boolean
   tempsAjornament : Integer
   nombreDeRecordatoris : Integer
-  nombreMaximDeRecordatoris : Integer
+  nombreMaximDeRecordatoris : Integer	
 end
 
 class Promocio
@@ -172,6 +171,11 @@ end
 association Ofereix between
   Farmacia[*]
   Promocio[*]
+end
+
+association InformaSobre between
+  NotificacioDeMedicament[*]
+  Medicacio[1]
 end
 
 -- OCL constraints
@@ -251,7 +255,7 @@ context Stock
 		self.quantitat >= 0
 
 
-context Notificacio
+context NotificacioDeMedicament
 
 inv recordatorisInferiorAMaxim:
   self.nombreDeRecordatoris < self.nombreMaximDeRecordatoris

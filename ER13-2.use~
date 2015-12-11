@@ -91,11 +91,15 @@ end
 class Notificacio
 attributes
   missatge : String
-  estaConfirmat : Boolean
   data : Date
+end
+
+class NotificacioDeMedicament < Notificacio
+attributes
+  estaConfirmat : Boolean
   tempsAjornament : Integer
   nombreDeRecordatoris : Integer
-  nombreMaximDeRecordatoris : Integer
+  nombreMaximDeRecordatoris : Integer	
 end
 
 class Promocio
@@ -246,7 +250,7 @@ context Stock
 		self.quantitat >= 0
 
 
-context Notificacio
+context NotificacioDeMedicament
 
 inv recordatorisInferiorAMaxim:
   self.nombreDeRecordatoris < self.nombreMaximDeRecordatoris
