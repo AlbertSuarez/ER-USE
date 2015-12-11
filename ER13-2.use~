@@ -173,6 +173,11 @@ association Ofereix between
   Promocio[*]
 end
 
+association InformaSobre between
+  NotificacioDePresa[*]
+  Medicacio[1]
+end
+
 -- OCL constraints
 
 constraints

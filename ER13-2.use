@@ -94,7 +94,7 @@ attributes
   data : Date
 end
 
-class NotificacioDeMedicament < Notificacio
+class NotificacioDePresa < Notificacio
 attributes
   estaConfirmat : Boolean
   tempsAjornament : Integer
@@ -174,7 +174,7 @@ association Ofereix between
 end
 
 association InformaSobre between
-  NotificacioDeMedicament[*]
+  NotificacioDePresa[*]
   Medicacio[1]
 end
 
@@ -255,7 +255,7 @@ context Stock
 		self.quantitat >= 0
 
 
-context NotificacioDeMedicament
+context NotificacioDePresa
 
 inv recordatorisInferiorAMaxim:
   self.nombreDeRecordatoris < self.nombreMaximDeRecordatoris
