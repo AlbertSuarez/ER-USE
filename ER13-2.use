@@ -93,7 +93,7 @@ end
 
 class NotificacioDePresa < Notificacio
 attributes
-	estaConfirmat : Boolean
+	estaConfirmada : Boolean
 	tempsDeAjornament : Integer
 	nombreDeRecordatoris : Integer
 	nombreMaximDeRecordatoris : Integer	
