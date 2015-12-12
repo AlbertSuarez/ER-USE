@@ -132,6 +132,7 @@ associationclass Missatge between
 	Seguiment[*] role conversa
 attributes
 	cos : String
+	data : Date
 end
 
 associationclass Seguiment between
