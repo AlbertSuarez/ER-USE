@@ -2,90 +2,87 @@
 
 model ER13
 
--- classes
+-- CLASSES
 
 class Date
 attributes
-  dia : Integer
-  mes : Integer
-  any : Integer
-  hora : Integer
-  minut : Integer
-  segon : Integer
+	dia : Integer
+	mes : Integer
+	any : Integer
+	hora : Integer
+	minut : Integer
+	segon : Integer
 operations
-  esPosteriorA(d : Date) : Boolean =
-    (self.any > d.any or
-     self.any = d.any and self.mes > d.mes or
-     self.any = d.any and self.mes = self.mes and self.dia > d.dia or
-     self.any = d.any and self.mes = self.mes and self.dia = d.dia and self.hora > d.hora or
-     self.any = d.any and self.mes = self.mes and self.dia = d.dia and self.hora = d.hora and self.minut > d.minut or
-     self.any = d.any and self.mes = self.mes and self.dia = d.dia and self.hora = d.hora and self.minut = d.minut and self.segon > d.segon)
-  esAnteriorA(d : Date) : Boolean =
-    (self.any < d.any or
-     self.any = d.any and self.mes < d.mes or
-     self.any = d.any and self.mes = self.mes and self.dia < d.dia or
-     self.any = d.any and self.mes = self.mes and self.dia = d.dia and self.hora < d.hora or
-     self.any = d.any and self.mes = self.mes and self.dia = d.dia and self.hora = d.hora and self.minut < d.minut or
-     self.any = d.any and self.mes = self.mes and self.dia = d.dia and self.hora = d.hora and self.minut = d.minut and self.segon < d.segon)
-  esIgualA(d : Date) : Boolean =
-    (self.any = d.any and
-     self.mes = d.mes and
-     self.dia = d.dia and
-     self.hora = d.hora and
-     self.minut = d.minut and
-     self.segon = d.segon)
+	esPosteriorA(d : Date) : Boolean =
+		(self.any > d.any or
+		self.any = d.any and self.mes > d.mes or
+		self.any = d.any and self.mes = self.mes and self.dia > d.dia or
+		self.any = d.any and self.mes = self.mes and self.dia = d.dia and self.hora > d.hora or
+		self.any = d.any and self.mes = self.mes and self.dia = d.dia and self.hora = d.hora and self.minut > d.minut or
+		self.any = d.any and self.mes = self.mes and self.dia = d.dia and self.hora = d.hora and self.minut = d.minut and self.segon > d.segon)
+	esAnteriorA(d : Date) : Boolean =
+		(self.any < d.any or
+		self.any = d.any and self.mes < d.mes or
+		self.any = d.any and self.mes = self.mes and self.dia < d.dia or
+		self.any = d.any and self.mes = self.mes and self.dia = d.dia and self.hora < d.hora or
+		self.any = d.any and self.mes = self.mes and self.dia = d.dia and self.hora = d.hora and self.minut < d.minut or
+		self.any = d.any and self.mes = self.mes and self.dia = d.dia and self.hora = d.hora and self.minut = d.minut and self.segon < d.segon)
+	esIgualA(d : Date) : Boolean =
+		(self.any = d.any and
+		self.mes = d.mes and
+		self.dia = d.dia and
+		self.hora = d.hora and
+		self.minut = d.minut and
+		self.segon = d.segon)
 end
 
 class Usuari
 attributes
-  dni : String
-  email : String
-  nom : String
-  contrasenya : String
-  dataDeAlta : Date
-  estaConectat : Boolean
-
+	dni : String
+	email : String
+	nom : String
+	contrasenya : String
+	dataDeAlta : Date
+	estaConectat : Boolean
 end
 
 class Pacient < Usuari
 attributes
-  estaSubscrit : Boolean
-  dataDeUltimPagament : Date
-  dataDeCaducitatDelServei : Date
-  numeroDeCompteBancari : String
-  urlICal : String
-  clauDAutentificacioGoogle : String
+	estaSubscrit : Boolean
+	dataDeUltimPagament : Date
+	dataDeCaducitatDelServei : Date
+	numeroDeCompteBancari : String
+	urlDeICal : String
+	clauDeAutentificacioGoogle : String
 end
 
 class PersonalSanitari < Usuari
 attributes
-
 end
 
 class Cuidador < PersonalSanitari
 attributes
-
 end
 
 class Metge < PersonalSanitari
 attributes
-  idententificacioSanitaria : Integer
+	idententificacioSanitaria : Integer
 end
 
 class Farmacia < Usuari
 attributes
-  adreca : String
+	adreca : String
 end
 
 class Tractament
 attributes
-  durada : Integer
+	durada : Integer
 end
 
 class Medicament
 attributes
-  codi : Integer
-  nom : String
+	codi : Integer
+	nom : String
 end
 
 class Notificacio
@@ -96,71 +93,70 @@ end
 
 class NotificacioDePresa < Notificacio
 attributes
-  estaConfirmat : Boolean
-  tempsAjornament : Integer
-  nombreDeRecordatoris : Integer
-  nombreMaximDeRecordatoris : Integer	
+	estaConfirmat : Boolean
+	tempsDeAjornament : Integer
+	nombreDeRecordatoris : Integer
+	nombreMaximDeRecordatoris : Integer	
 end
 
 class Promocio
 attributes
-  nom : String
-  dataDeInici : Date
-  dataDeFi : Date
+	nom : String
+	dataDeInici : Date
+	dataDeFi : Date
 end
 
 class Apat
 attributes
-  hora : Integer
-  tipus : TipusApat
+	hora : Integer
+	tipus : TipusDeApat
 end
 
 
---Enumerations
+-- ENUMERATIONS
 
-enum TipusApat {Esmorzar, Dinar, Sopar}
+enum TipusDeApat {Esmorzar, Dinar, Sopar}
 
--- association classes
+-- ASSOCIATION CLASSES
 
 associationclass Medicacio between
-   Medicament[*]
-   Tractament[*]
+	Medicament[*]
+	Tractament[*]
 attributes
-   periodicitat : Integer
-   dosiEnMG : Integer
+	periodicitat : Integer
+	dosiEnMG : Integer
 end
 
 associationclass Missatge between
-  Usuari [*] role remitent
-  Seguiment[*] role conversacio
+	Usuari [*] role remitent
+	Seguiment[*] role conversa
 attributes
-  cos : String
+	cos : String
 end
 
 associationclass Seguiment between
-   Pacient[*] role pacient
-   PersonalSanitari[*] role personalSanitari
+	Pacient[*] role pacient
+	PersonalSanitari[*] role personalSanitari
 attributes
-
 end
 
 associationclass Stock between
-   Medicament[*]
-   Pacient[*]
+	Medicament[*]
+	Pacient[*]
 attributes
-  quantitat : Integer
+	quantitat : Integer
 end
 
--- associations
+-- ASSOCIATION
 
 association Fa between
-  Pacient[*]
-  Apat[*]
+	Pacient[*]
+	Apat[*]
 end
 
 association Segueix between
-  Pacient[*]
-  Tractament[*]
+	Pacient[*]
+	Tractament[*]
 end
 
 association Rep between
@@ -169,59 +165,59 @@ association Rep between
 end
 
 association Ofereix between
-  Farmacia[*]
-  Promocio[*]
+	Farmacia[*]
+	Promocio[*]
 end
 
 association InformaSobre between
-  NotificacioDePresa[*]
-  Medicacio[1]
+	NotificacioDePresa[*]
+	Medicacio[1]
 end
 
--- OCL constraints
+-- OCL CONSTRAINTS
 
 constraints
 
 context Usuari
 	-- Dos usuaris no poden tenir el mateix email
-	inv teUnEmailUnic:
+	inv 	teUnEmailUnic:
 		Usuari.allInstances()->isUnique(email)
 
 	-- Una contrasenya no pot tenir menys de 8caràcters
-	inv teUnaContrasenyaAmbMidaDeterminada:
+	inv	 teUnaContrasenyaAmbMidaDeterminada:
 		self.contrasenya.size()>8
 
 	-- Un usuari no pot rebre un avis abans de donar-se d’alta
-	inv seHaDonatDeAltaAbansDeRebreUnAvis:
+	inv 	seHaDonatDeAltaAbansDeRebreUnAvis:
 		not self.notificacions->exists(n | n.data.esAnteriorA(self.dataDeAlta))
 		
 
 context Farmacia
 
 	-- La data d’inici d’una promoció ha de ser major o igual que la data d’alta de la farmacia
-	inv teDataDeAltaAnteriorALaDataDeIniciDeLaPromocio:
+	inv 	teDataDeAltaAnteriorALaDataDeIniciDeLaPromocio:
 		not self.promocio->exists(p | p.dataDeInici.esAnteriorA(self.dataDeAlta))
 
 context Promocio
 
 	-- La data d’inici ha de ser menor que la data de fi
-	inv teDataDeFiPosteriorALaDataDeInici:
+	inv	 teDataDeFiPosteriorALaDataDeInici:
 		self.dataDeFi.esPosteriorA(self.dataDeInici)
 
 context Apat
 
 	-- La hora del Apat ha de contenir hores del 0 al 23h
-	inv teUnaHoraDeApatReal:
+	inv	 teUnaHoraDeApatReal:
 		self.hora >= 0 or self.hora <= 23
 
 context Pacient
 
 	-- La data de Ultim Pagament no pot ser anterior a la data de Alta
-	inv	teUnaDataDeUltimPagamentPosteriorALaDataDeAlta:
+	inv 	teUnaDataDeUltimPagamentPosteriorALaDataDeAlta:
 		self.dataDeUltimPagament <> null and (self.dataDeUltimPagament.esPosteriorA(self.dataDeAlta) or self.dataDeUltimPagament.esIgualA(self.dataDeAlta))
 
 	-- Un pacient subscrit ha de tenir data de pagament i compte bancari
-	inv teDataDePagamentINumeroDeCompteSiEstaSubscrit:
+	inv 	teDataDePagamentINumeroDeCompteSiEstaSubscrit:
 		self.estaSubscrit and self.dataDeUltimPagament <> null and self.numeroDeCompteBancari <> null
 
 	-- La data de Caducitat del Servei no pot ser anterior a la data de Alta
@@ -235,35 +231,35 @@ context Pacient
 context Tractament
 
 	-- La durada ha de ser positiva
-	inv teLaDuradaPositiva:
-		self.durada >= 0
+	inv	teLaDuradaPositiva:
+		self.durada > 0
 
 context Medicacio
 
 	-- La periodicitat ha de ser positiva
-	inv teLaPeriodicitatPositiva:
+	inv 	teLaPeriodicitatPositiva:
 		self.periodicitat > 0
 
 	-- La dosi en mg ha de ser positiva
-	inv teLaDosiEnMGPositiva:
+	inv 	teLaDosiEnMGPositiva:
 		self.dosiEnMG > 0
 
 context Stock
 
 	-- La quantitat no pot ser negativa
-	inv teLaQuantitatPositiva:
+	inv	teLaQuantitatPositiva:
 		self.quantitat >= 0
 
 
 context NotificacioDePresa
-
-inv recordatorisInferiorAMaxim:
-  self.nombreDeRecordatoris < self.nombreMaximDeRecordatoris
+	
+	-- La quantitat de recordatoris de la notificacio es menor al maxim
+	inv	teMenysRecordatorisQueElAMaxim:
+		self.nombreDeRecordatoris < self.nombreMaximDeRecordatoris
 
 
 context Missatge
 
-inv remitentMisatgeASeguiment:
-  self.remitent = self.conversacio.pacient or self.remitent = self.conversacio.personalSanitari
-
--- Inv de Associacions
+	-- Un missatge te un remitent que esta a la conversa, sent pacient o personal sanitari
+	inv	teUnRemitentQuePertanyALaConversa:
+		self.remitent = self.conversa.pacient or self.remitent = self.conversa.personalSanitari
