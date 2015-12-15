@@ -36,7 +36,7 @@ operations
 		self.segon = d.segon)
 end
 
-class Usuari
+abstract class Usuari
 attributes
 	dni : String
 	email : String
@@ -56,7 +56,7 @@ attributes
 	clauDeAutentificacioGoogle : String
 end
 
-class PersonalSanitari < Usuari
+abstract class PersonalSanitari < Usuari
 attributes
 end
 
@@ -66,7 +66,7 @@ end
 
 class Metge < PersonalSanitari
 attributes
-	idententificacioSanitaria : Integer
+	identificacioSanitaria : Integer
 end
 
 class Farmacia < Usuari
@@ -132,6 +132,7 @@ associationclass Missatge between
 	Seguiment[*] role conversa
 attributes
 	cos : String
+	data : Date
 end
 
 associationclass Seguiment between
@@ -190,6 +191,14 @@ context Usuari
 	-- Un usuari no pot rebre un avis abans de donar-se d’alta
 	inv 	seHaDonatDeAltaAbansDeRebreUnAvis:
 		not self.notificacions->exists(n | n.data.esAnteriorA(self.dataDeAlta))
+
+	-- Un usuari ha de ser pacient, personal sanitari o farmàcia, mai més d'un rol alhora
+	inv	noPotSerAlhoraPacientPersonalSanitariOFarmacia:
+		self.oclIsTypeOf(Pacient) implies (not self.oclIsTypeOf(PersonalSanitari) and not self.oclIsTypeOf(Farmacia))
+		and
+		self.oclIsTypeOf(PersonalSanitari) implies (not self.oclIsTypeOf(Pacient) and not self.oclIsTypeOf(Farmacia))
+		and
+		self.oclIsTypeOf(Farmacia) implies (not self.oclIsTypeOf(PersonalSanitari) and not self.oclIsTypeOf(Pacient))
 		
 
 context Farmacia
