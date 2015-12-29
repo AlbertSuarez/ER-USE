@@ -238,6 +238,9 @@ context Pacient
 	inv	teLaDataDeCaducitatPosteriorALaDataDePagament:
 		self.dataDeUltimPagament <> null and self.dataDeUltimPagament.esAnteriorA(self.dataDeCaducitatDelServei)
 
+	-- Un pacient no pot tenir 2 tractaments alhora amb el mateix medicament
+	-- inv teUnUnicTractamentAmbElMateixMedicamentAlhora:
+		-- not self.tractament->exists(p1, p2 | p1.medicacio->...
 
 context Medicacio
 
@@ -268,3 +271,9 @@ context Missatge
 	-- Un missatge te un remitent que esta a la conversa, sent pacient o personal sanitari
 	inv	teUnRemitentQuePertanyALaConversa:
 		self.remitent = self.conversa.pacient or self.remitent = self.conversa.personalSanitari
+
+context Tractament
+
+	-- Un tractament te una data final superior a la inicial
+	inv teLaDataFiPosteriorALaDataInicial:
+		self.dataFi.esPosteriorA(self.dataInici)
