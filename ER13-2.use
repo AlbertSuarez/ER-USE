@@ -201,6 +201,14 @@ context Usuari
 		and
 		(self.oclIsTypeOf(Farmacia) implies (not self.oclIsTypeOf(PersonalSanitari) and not self.oclIsTypeOf(Pacient)))
 		
+context PersonalSanitari
+
+-- Un Personal sanitari ha de ser metge o cuidador, mai més d’un rol alhora.
+	inv	noPotSerAlhoraMetgeCuidador:
+		(self.oclIsTypeOf(Cuidador) implies (not self.oclIsTypeOf(Metge)))
+		and
+		(self.oclIsTypeOf(Metge) implies (not self.oclIsTypeOf(Cuidador)))
+
 
 context Farmacia
 
