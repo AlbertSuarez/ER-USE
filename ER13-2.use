@@ -34,6 +34,8 @@ operations
 		self.hora = d.hora and
 		self.minut = d.minut and
 		self.segon = d.segon)
+	estaEntre(d1 : Date, d2 : Date) : Boolean =
+		((self.esPosteriorA(d1) and self.esAnteriorA(d2)) or self.esIgualA(d1) or self.esIgualA(d2))
 end
 
 abstract class Usuari
@@ -255,8 +257,9 @@ context Pacient
 		self.dataDeUltimPagament <> null and self.dataDeUltimPagament.esAnteriorA(self.dataDeCaducitatDelServei)
 
 	-- Un pacient no pot tenir 2 tractaments alhora amb el mateix medicament
-	-- inv teUnUnicTractamentAmbElMateixMedicamentAlhora:
-		-- not self.tractament->exists(p1, p2 | p1.medicacio->...
+	inv 	teUnUnicTractamentAmbElMateixMedicamentAlhora:
+		not self.tractament->exists(t1, t2 | t1 <> t2 and t1.medicament->intersection(t2.medicament) <> null 
+		and (t1.dataInici.estaEntre(t2.dataInici, t2.dataFi) or t1.dataFi.estaEntre(t2.dataInici, t2.dataFi)))
 
 context Medicacio
 
@@ -277,9 +280,9 @@ context Stock
 
 context NotificacioDePresa
 	
-	-- La quantitat de recordatoris de la notificacio es menor al maxim
-	inv	teMenysRecordatorisQueElAMaxim:
-		self.nombreDeRecordatoris < self.nombreMaximDeRecordatoris
+	-- La quantitat de recordatoris de la notificacio es menor o igual al maxim
+	inv	noTeMesRecordatorisQueElMaxim:
+		self.nombreDeRecordatoris <= self.nombreMaximDeRecordatoris
 
 
 context Missatge

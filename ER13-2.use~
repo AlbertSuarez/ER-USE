@@ -34,6 +34,8 @@ operations
 		self.hora = d.hora and
 		self.minut = d.minut and
 		self.segon = d.segon)
+	estaEntre(d1 : Date, d2 : Date) : Boolean =
+		((self.esPosteriorA(d1) and self.esAnteriorA(d2)) or self.esIgualA(d1) or self.esIgualA(d2))
 end
 
 abstract class Usuari
@@ -76,7 +78,14 @@ end
 
 class Tractament
 attributes
-	durada : Integer
+	dataInici : Date
+	dataFi : Date
+end
+
+class Missatge 
+attributes
+	cos : String
+	data : Date
 end
 
 class Medicament
@@ -127,14 +136,6 @@ attributes
 	dosiEnMG : Integer
 end
 
-associationclass Missatge between
-	Usuari [*] role remitent
-	Seguiment[*] role conversa
-attributes
-	cos : String
-	data : Date
-end
-
 associationclass Seguiment between
 	Pacient[*] role pacient
 	PersonalSanitari[*] role personalSanitari
@@ -149,6 +150,16 @@ attributes
 end
 
 -- ASSOCIATION
+
+association Te between
+	Seguiment[1] role conversa
+	Missatge[*] role missatge
+end
+
+association Envia between
+	Usuari[1] role remitent
+	Missatge[*] role missatge
+end
 
 association Fa between
 	Pacient[*]
@@ -166,7 +177,7 @@ association Rep between
 end
 
 association Ofereix between
-	Farmacia[*]
+	Farmacia[1]
 	Promocio[*]
 end
 
@@ -194,12 +205,20 @@ context Usuari
 
 	-- Un usuari ha de ser pacient, personal sanitari o farm√†cia, mai m√©s d'un rol alhora
 	inv	noPotSerAlhoraPacientPersonalSanitariOFarmacia:
-		self.oclIsTypeOf(Pacient) implies (not self.oclIsTypeOf(PersonalSanitari) and not self.oclIsTypeOf(Farmacia))
+		(self.oclIsTypeOf(Pacient) implies (not self.oclIsTypeOf(PersonalSanitari) and not self.oclIsTypeOf(Farmacia)))
 		and
-		self.oclIsTypeOf(PersonalSanitari) implies (not self.oclIsTypeOf(Pacient) and not self.oclIsTypeOf(Farmacia))
+		(self.oclIsTypeOf(PersonalSanitari) implies (not self.oclIsTypeOf(Pacient) and not self.oclIsTypeOf(Farmacia)))
 		and
-		self.oclIsTypeOf(Farmacia) implies (not self.oclIsTypeOf(PersonalSanitari) and not self.oclIsTypeOf(Pacient))
+		(self.oclIsTypeOf(Farmacia) implies (not self.oclIsTypeOf(PersonalSanitari) and not self.oclIsTypeOf(Pacient)))
 		
+context PersonalSanitari
+
+-- Un Personal sanitari ha de ser metge o cuidador, mai mÈs díun rol alhora.
+	inv	noPotSerAlhoraMetgeCuidador:
+		(self.oclIsTypeOf(Cuidador) implies (not self.oclIsTypeOf(Metge)))
+		and
+		(self.oclIsTypeOf(Metge) implies (not self.oclIsTypeOf(Cuidador)))
+
 
 context Farmacia
 
@@ -237,11 +256,10 @@ context Pacient
 	inv	teLaDataDeCaducitatPosteriorALaDataDePagament:
 		self.dataDeUltimPagament <> null and self.dataDeUltimPagament.esAnteriorA(self.dataDeCaducitatDelServei)
 
-context Tractament
-
-	-- La durada ha de ser positiva
-	inv	teLaDuradaPositiva:
-		self.durada > 0
+	-- Un pacient no pot tenir 2 tractaments alhora amb el mateix medicament
+	inv 	teUnUnicTractamentAmbElMateixMedicamentAlhora:
+		not self.tractament->exists(t1, t2 | t1 <> t2 and t1.medicament->intersection(t2.medicament) <> null 
+		and (t1.dataInici.estaEntre(t2.dataInici, t2.dataFi) or t1.dataFi.estaEntre(t2.dataInici, t2.dataFi)))
 
 context Medicacio
 
@@ -272,3 +290,9 @@ context Missatge
 	-- Un missatge te un remitent que esta a la conversa, sent pacient o personal sanitari
 	inv	teUnRemitentQuePertanyALaConversa:
 		self.remitent = self.conversa.pacient or self.remitent = self.conversa.personalSanitari
+
+context Tractament
+
+	-- Un tractament te una data final superior a la inicial
+	inv teLaDataFiPosteriorALaDataInicial:
+		self.dataFi.esPosteriorA(self.dataInici)
