@@ -82,20 +82,16 @@ association Sobre between
 	ConsultaPercentatgeAdherenciaEntreDuesDates [0..1]
 end
 
--- association
-
 class ConsultaPercentatgeAdherenciaEntreDuesDates < Query
 attributes
-	answer : Set(Notificacio)
+	answer : Real
 	dataInici : Date
 	dataFi : Date
 operations
 	effect()
-	effectExtern() : Boolean
+	begin
+		self.answer:=self.usuari.notificacions->select(n|n.data.esPosteriorA(self.dataInici) and n.data.esAnteriorA(self.dataFi) and n.oclIsTypeOf(NotificacioDePresa) and n.oclAsType(NotificacioDePresa).estaConfirmada)->size*100 / self.usuari.notificacions->select(n|n.data.esPosteriorA(self.dataInici) and n.data.esAnteriorA(self.dataFi) and n.oclIsTypeOf(NotificacioDePresa))->size
+		
+	end
 end
 
-constraints
-
-
-context ConsultaPercentatgeAdherenciaEntreDuesDates::effectExtern() : Boolean
-	body: dataInici.isAnteriorA(dataFi)
