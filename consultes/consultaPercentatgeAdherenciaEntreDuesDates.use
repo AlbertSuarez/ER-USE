@@ -79,7 +79,7 @@ end
 
 association Sobre between
 	Usuari[1] role usuari
-	ConsultaPercentatgeAdherenciaEntreDuesDates [0..1]
+	ConsultaPercentatgeAdherenciaEntreDuesDates [0..1] role consulta
 end
 
 class ConsultaPercentatgeAdherenciaEntreDuesDates < Query
