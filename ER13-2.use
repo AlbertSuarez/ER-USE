@@ -78,6 +78,7 @@ end
 
 class Tractament
 attributes
+	nom : String
 	dataInici : Date
 	dataFi : Date
 end
