@@ -1,0 +1,65 @@
+-- $ProjectHeader: use 0.393 Wed, 02 Nov 2015 10:00:28 +0200 opti $
+
+model afegirPromocio
+
+class Date
+attributes
+	dia : Integer
+	mes : Integer
+	any : Integer
+	hora : Integer
+	minut : Integer
+	segon : Integer
+operations
+	esPosteriorA(d : Date) : Boolean =
+		(self.any > d.any or
+		self.any = d.any and self.mes > d.mes or
+		self.any = d.any and self.mes = self.mes and self.dia > d.dia or
+		self.any = d.any and self.mes = self.mes and self.dia = d.dia and self.hora > d.hora or
+		self.any = d.any and self.mes = self.mes and self.dia = d.dia and self.hora = d.hora and self.minut > d.minut or
+		self.any = d.any and self.mes = self.mes and self.dia = d.dia and self.hora = d.hora and self.minut = d.minut and self.segon > d.segon)
+	esAnteriorA(d : Date) : Boolean =
+		(self.any < d.any or
+		self.any = d.any and self.mes < d.mes or
+		self.any = d.any and self.mes = self.mes and self.dia < d.dia or
+		self.any = d.any and self.mes = self.mes and self.dia = d.dia and self.hora < d.hora or
+		self.any = d.any and self.mes = self.mes and self.dia = d.dia and self.hora = d.hora and self.minut < d.minut or
+		self.any = d.any and self.mes = self.mes and self.dia = d.dia and self.hora = d.hora and self.minut = d.minut and self.segon < d.segon)
+	esIgualA(d : Date) : Boolean =
+		(self.any = d.any and
+		self.mes = d.mes and
+		self.dia = d.dia and
+		self.hora = d.hora and
+		self.minut = d.minut and
+		self.segon = d.segon)
+	estaEntre(d1 : Date, d2 : Date) : Boolean =
+		((self.esPosteriorA(d1) and self.esAnteriorA(d2)) or self.esIgualA(d1) or self.esIgualA(d2))
+end
+
+abstract class Usuari
+attributes
+	dni : String
+	email : String
+	nom : String
+	contrasenya : String
+	dataDeAlta : Date
+	estaConectat : Boolean
+end
+
+class Event
+attributes
+	data : Date
+end
+
+class DomainEvent < Event
+attributes
+end
+
+class ConnexioUsuari < DomainEvent
+attributes
+end
+
+association Connecta between
+	ConnexioUsuari[0..1] role sistema
+	Usuari[1] role demandant
+end
