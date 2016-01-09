@@ -6,15 +6,15 @@
     <showassocnames>true</showassocnames>
     <showattributes>true</showattributes>
     <showmultiplicities>false</showmultiplicities>
-    <showoperations>false</showoperations>
+    <showoperations>true</showoperations>
     <showrolenames>true</showrolenames>
     <showgrid>false</showgrid>
   </diagramOptions>
   <node id="SincronitzarGoogleCalendar" sizeCalculated="true" type="Class">
     <name>SincronitzarGoogleCalendar</name>
     <strategy type="org.tzi.use.gui.views.diagrams.elements.positioning.StrategyFixed">
-      <x>112.0</x>
-      <y>302.0</y>
+      <x>111.0</x>
+      <y>306.0</y>
     </strategy>
     <hidden>false</hidden>
   </node>
@@ -26,19 +26,19 @@
     </strategy>
     <hidden>false</hidden>
   </node>
-  <node id="Usuari" sizeCalculated="true" type="Class">
+  <node height="136.0" id="Usuari" sizeCalculated="false" type="Class" width="138.3583984375">
     <name>Usuari</name>
     <strategy type="org.tzi.use.gui.views.diagrams.elements.positioning.StrategyFixed">
-      <x>471.0</x>
-      <y>47.0</y>
+      <x>547.0</x>
+      <y>50.0</y>
     </strategy>
     <hidden>false</hidden>
   </node>
-  <node id="Pacient" sizeCalculated="true" type="Class">
+  <node height="135.0" id="Pacient" sizeCalculated="false" type="Class" width="205.8408203125">
     <name>Pacient</name>
     <strategy type="org.tzi.use.gui.views.diagrams.elements.positioning.StrategyFixed">
-      <x>438.0</x>
-      <y>255.0</y>
+      <x>514.0</x>
+      <y>258.0</y>
     </strategy>
     <hidden>false</hidden>
   </node>
@@ -53,8 +53,8 @@
   <node id="Date" sizeCalculated="true" type="Class">
     <name>Date</name>
     <strategy type="org.tzi.use.gui.views.diagrams.elements.positioning.StrategyFixed">
-      <x>294.0</x>
-      <y>104.0</y>
+      <x>267.0</x>
+      <y>63.0</y>
     </strategy>
     <hidden>false</hidden>
   </node>
@@ -63,6 +63,47 @@
     <target>Pacient</target>
     <name>Sincronitza</name>
     <properties>
+      <edgeproperty id="Sincronitza::target::rolename"
+        sizeCalculated="true" type="rolename" userDefined="true" visible="true">
+        <name>pacient</name>
+        <strategy type="org.tzi.use.gui.views.diagrams.elements.positioning.StrategyRelativeToAttached">
+          <userOffsetX>-2.0</userOffsetX>
+          <userOffsetY>12.0</userOffsetY>
+          <attached>Sincronitza::WayPoint::1</attached>
+          <offset_x>8</offset_x>
+          <offset_y>8</offset_y>
+          <placement>TOP</placement>
+        </strategy>
+        <hidden>false</hidden>
+      </edgeproperty>
+      <edgeproperty id="Sincronitza::target::multiplicity"
+        sizeCalculated="true" type="multiplicity" userDefined="false" visible="true">
+        <name>1</name>
+        <strategy type="org.tzi.use.gui.views.diagrams.elements.positioning.StrategyRelativeToAttached">
+          <userOffsetX>0.0</userOffsetX>
+          <userOffsetY>0.0</userOffsetY>
+          <attached>Sincronitza::WayPoint::1</attached>
+          <offset_x>8</offset_x>
+          <offset_y>8</offset_y>
+          <placement>BOTTOM</placement>
+        </strategy>
+        <hidden>false</hidden>
+      </edgeproperty>
+      <edgeproperty id="Sincronitza::AssociationName"
+        sizeCalculated="true" type="associationName" userDefined="false" visible="true">
+        <name>Sincronitza</name>
+        <strategy type="org.tzi.use.gui.views.diagrams.elements.positioning.StrategyInBetween">
+          <userOffsetX>0.0</userOffsetX>
+          <userOffsetY>0.0</userOffsetY>
+          <offsetX>0.0</offsetX>
+          <offsetY>-10.0</offsetY>
+          <related length="2">
+            <related0>Sincronitza::WayPoint::0</related0>
+            <related1>Sincronitza::WayPoint::1</related1>
+          </related>
+        </strategy>
+        <hidden>false</hidden>
+      </edgeproperty>
       <edgeproperty id="Sincronitza::source::multiplicity"
         sizeCalculated="true" type="multiplicity" userDefined="false" visible="true">
         <name>0..1</name>
@@ -86,47 +127,6 @@
           <offset_x>8</offset_x>
           <offset_y>8</offset_y>
           <placement>TOP</placement>
-        </strategy>
-        <hidden>false</hidden>
-      </edgeproperty>
-      <edgeproperty id="Sincronitza::target::multiplicity"
-        sizeCalculated="true" type="multiplicity" userDefined="false" visible="true">
-        <name>1</name>
-        <strategy type="org.tzi.use.gui.views.diagrams.elements.positioning.StrategyRelativeToAttached">
-          <userOffsetX>0.0</userOffsetX>
-          <userOffsetY>0.0</userOffsetY>
-          <attached>Sincronitza::WayPoint::1</attached>
-          <offset_x>8</offset_x>
-          <offset_y>8</offset_y>
-          <placement>BOTTOM</placement>
-        </strategy>
-        <hidden>false</hidden>
-      </edgeproperty>
-      <edgeproperty id="Sincronitza::target::rolename"
-        sizeCalculated="true" type="rolename" userDefined="true" visible="true">
-        <name>pacient</name>
-        <strategy type="org.tzi.use.gui.views.diagrams.elements.positioning.StrategyRelativeToAttached">
-          <userOffsetX>-2.0</userOffsetX>
-          <userOffsetY>12.0</userOffsetY>
-          <attached>Sincronitza::WayPoint::1</attached>
-          <offset_x>8</offset_x>
-          <offset_y>8</offset_y>
-          <placement>TOP</placement>
-        </strategy>
-        <hidden>false</hidden>
-      </edgeproperty>
-      <edgeproperty id="Sincronitza::AssociationName"
-        sizeCalculated="true" type="associationName" userDefined="false" visible="true">
-        <name>Sincronitza</name>
-        <strategy type="org.tzi.use.gui.views.diagrams.elements.positioning.StrategyInBetween">
-          <userOffsetX>0.0</userOffsetX>
-          <userOffsetY>0.0</userOffsetY>
-          <offsetX>0.0</offsetX>
-          <offsetY>-10.0</offsetY>
-          <related length="2">
-            <related0>Sincronitza::WayPoint::0</related0>
-            <related1>Sincronitza::WayPoint::1</related1>
-          </related>
         </strategy>
         <hidden>false</hidden>
       </edgeproperty>
@@ -239,11 +239,19 @@
         <hidden>false</hidden>
       </edgeproperty>
       <edgeproperty id="Generalization::Pacient::Usuari::WayPoint::1"
-        sizeCalculated="true" type="WayPoint" userDefined="false" visible="true">
+        sizeCalculated="true" type="WayPoint" userDefined="true" visible="true">
         <name>1</name>
-        <strategy type="org.tzi.use.gui.views.diagrams.elements.positioning.StrategyAttachedIntersection">
-          <userOffsetX>0.0</userOffsetX>
-          <userOffsetY>0.0</userOffsetY>
+        <strategy type="org.tzi.use.gui.views.diagrams.elements.positioning.StrategyRelativeToCorner">
+          <userOffsetX>69.38556885332082</userOffsetX>
+          <userOffsetY>144.0</userOffsetY>
+          <basisDeltaX>ABSOLUTE</basisDeltaX>
+          <deltaX>0.0</deltaX>
+          <maxDeltaX>1.7976931348623157E308</maxDeltaX>
+          <basisDeltaY>ABSOLUTE</basisDeltaY>
+          <deltaY>0.0</deltaY>
+          <maxDeltaY>1.7976931348623157E308</maxDeltaY>
+          <corner>NORTH_WEST</corner>
+          <relativeNodeId>Usuari</relativeNodeId>
         </strategy>
         <id>1</id>
         <specialid>2</specialid>

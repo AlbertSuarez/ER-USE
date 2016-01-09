@@ -1,6 +1,23 @@
 -- $ProjectHeader: use 0.393 Wed, 02 Nov 2015 10:00:28 +0200 opti $
 
-model SincronitzarGoogleCalendar
+model SincronitzarRecepta
+
+
+class Apat
+attributes
+	hora : Integer
+	tipus : TipusDeApat
+end
+
+association Fa between
+	Pacient[*]
+	Apat[*]
+end
+
+
+-- ENUMERATIONS
+
+enum TipusDeApat {Esmorzar, Dinar, Sopar}
 
 class Date
 attributes
@@ -34,6 +51,13 @@ operations
 		self.segon = d.segon)
 	estaEntre(d1 : Date, d2 : Date) : Boolean =
 		((self.esPosteriorA(d1) and self.esAnteriorA(d2)) or self.esIgualA(d1) or self.esIgualA(d2))
+end 
+
+class Tractament
+attributes
+	nom : String
+	dataInici : Date
+	dataFi : Date
 end
 
 abstract class Usuari
@@ -56,6 +80,26 @@ attributes
 	clauDeAutentificacioGoogle : String
 end
 
+class Medicament
+attributes
+	codi : Integer
+	nom : String
+end
+
+associationclass Medicacio between
+	Medicament[*]
+	Tractament[*]
+attributes
+	periodicitat : Integer
+	dosiEnMG : Integer
+end
+
+association Segueix between
+	Pacient[*]
+	Tractament[*]
+end
+
+
 class Event
 attributes
 	data : Date
@@ -65,13 +109,13 @@ class DomainEvent < Event
 attributes
 end
 
-class SincronitzarGoogleCalendar < DomainEvent
+class SincronitzarReceptes < DomainEvent
 attributes
 operations
 	effect()
 end
 
-association Sincronitza between
-	SincronitzarGoogleCalendar[0..1] role sistema
-	Pacient[1] role pacient
+association Actualitza between
+	Pacient[1..*]
+	SincronitzarReceptes[0..1]
 end
