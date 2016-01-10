@@ -95,3 +95,9 @@ operations
 	end
 end
 
+constraints
+
+context ConsultaPercentatgeAdherenciaEntreDuesDates::effect()
+	pre: self.dataInici.esAnteriorA(dataFi)
+
+
