@@ -79,8 +79,8 @@ end
 class Tractament
 attributes
 	nom : String
-	dataInici : Date
-	dataFi : Date
+	dataDeInici : Date
+	dataDeFi : Date
 end
 
 class Missatge 
@@ -282,7 +282,7 @@ context Pacient
 	-- Un pacient no pot tenir 2 tractaments alhora amb el mateix medicament
 	inv 	teUnUnicTractamentAmbElMateixMedicamentAlhora:
 		not self.tractament->exists(t1, t2 | t1 <> t2 and t1.medicament->intersection(t2.medicament) <> null 
-		and (t1.dataInici.estaEntre(t2.dataInici, t2.dataFi) or t1.dataFi.estaEntre(t2.dataInici, t2.dataFi)))
+		and (t1.dataDeInici.estaEntre(t2.dataDeInici, t2.dataDeFi) or t1.dataDeFi.estaEntre(t2.dataDeInici, t2.dataDeFi)))
 
 context Medicacio
 
@@ -317,5 +317,5 @@ context Missatge
 context Tractament
 
 	-- Un tractament te una data final superior a la inicial
-	inv teLaDataFiPosteriorALaDataInicial:
-		self.dataFi.esPosteriorA(self.dataInici)
+	inv teLadataDeFiPosteriorALadataDeInicial:
+		self.dataDeFi.esPosteriorA(self.dataDeInici)
