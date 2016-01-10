@@ -122,6 +122,25 @@ attributes
 	tipus : TipusDeApat
 end
 
+class Event
+attributes
+	date : Date
+end
+
+class DomainEvent < Event
+end
+
+class BaixaUsuari < DomainEvent
+attributes
+	contrasenya : String
+operations
+	effect()
+end
+
+association Elimina between
+	BaixaUsuari [0..1] role baixaUsuari
+	Usuari[1] role usuari
+end
 
 -- ENUMERATIONS
 

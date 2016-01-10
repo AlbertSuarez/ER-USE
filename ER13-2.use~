@@ -78,6 +78,7 @@ end
 
 class Tractament
 attributes
+	nom : String
 	dataInici : Date
 	dataFi : Date
 end
@@ -121,6 +122,25 @@ attributes
 	tipus : TipusDeApat
 end
 
+class Event
+attributes
+	date : Date
+end
+
+class DomainEvent < Event
+end
+
+class BaixaUsuari < DomainEvent
+attributes
+	contrasenya : String
+operations
+	effect()
+end
+
+associtation Elimina between
+	BaixaUsuari [0..1] role baixaUsuari
+	Usuari[1] role usuari
+end
 
 -- ENUMERATIONS
 
@@ -280,9 +300,9 @@ context Stock
 
 context NotificacioDePresa
 	
-	-- La quantitat de recordatoris de la notificacio es menor al maxim
-	inv	teMenysRecordatorisQueElAMaxim:
-		self.nombreDeRecordatoris < self.nombreMaximDeRecordatoris
+	-- La quantitat de recordatoris de la notificacio es menor o igual al maxim
+	inv	noTeMesRecordatorisQueElMaxim:
+		self.nombreDeRecordatoris <= self.nombreMaximDeRecordatoris
 
 
 context Missatge
