@@ -79,8 +79,8 @@ end
 class Tractament
 attributes
 	nom : String
-	dataInici : Date
-	dataFi : Date
+	dataDeInici : Date
+	dataDeFi : Date
 end
 
 class Missatge 
@@ -124,22 +124,45 @@ end
 
 class Event
 attributes
-	date : Date
+    data:Date
 end
 
-class DomainEvent < Event
+class Query < Event
 end
 
-class BaixaUsuari < DomainEvent
+class ConsultaTractaments < Query
 attributes
-	contrasenya : String
+    answer: Set(String)
+operations
+    effect()
+	begin
+		self.answer:=self.pacient.tractament->collect(p| p.nom)->asSet
+	end
+end
+
+class ConsultaPercentatgeAdherenciaEntreDuesDates < Query
+attributes
+	answer : Real
+	dataInici : Date
+	dataFi : Date
 operations
 	effect()
+	begin
+                 self.answer:=self.usuari.notificacions->
+                 select(n|n.data.esPosteriorA(self.dataInici)
+                 and n.data.esAnteriorA(self.dataFi) 
+                 and n.oclIsTypeOf(NotificacioDePresa)
+                 and n.oclAsType(NotificacioDePresa).estaConfirmada)->size*100 /       
+                 self.usuari.notificacions->select(n|n.data.esPosteriorA(self.dataInici) 
+                 and n.data.esAnteriorA(self.dataFi) 
+                 and n.oclIsTypeOf(NotificacioDePresa))->size
+		
+	end
 end
 
-association Elimina between
-	BaixaUsuari [0..1] role baixaUsuari
-	Usuari[1] role usuari
+association Consulta between
+  ConsultaTractaments[*]
+  Pacient[*]
 end
 
 -- ENUMERATIONS
@@ -279,7 +302,7 @@ context Pacient
 	-- Un pacient no pot tenir 2 tractaments alhora amb el mateix medicament
 	inv 	teUnUnicTractamentAmbElMateixMedicamentAlhora:
 		not self.tractament->exists(t1, t2 | t1 <> t2 and t1.medicament->intersection(t2.medicament) <> null 
-		and (t1.dataInici.estaEntre(t2.dataInici, t2.dataFi) or t1.dataFi.estaEntre(t2.dataInici, t2.dataFi)))
+		and (t1.dataDeInici.estaEntre(t2.dataDeInici, t2.dataDeFi) or t1.dataDeFi.estaEntre(t2.dataDeInici, t2.dataDeFi)))
 
 context Medicacio
 
@@ -314,5 +337,5 @@ context Missatge
 context Tractament
 
 	-- Un tractament te una data final superior a la inicial
-	inv teLaDataFiPosteriorALaDataInicial:
-		self.dataFi.esPosteriorA(self.dataInici)
+	inv teLadataDeFiPosteriorALadataDeInicial:
+		self.dataDeFi.esPosteriorA(self.dataDeInici)

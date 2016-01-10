@@ -140,6 +140,7 @@ operations
 	end
 end
 
+
 association Consulta between
   ConsultaTractaments[*]
   Pacient[*]
