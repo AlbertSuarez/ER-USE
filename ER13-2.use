@@ -124,22 +124,25 @@ end
 
 class Event
 attributes
-	date : Date
+    data:Date
 end
 
-class DomainEvent < Event
+class Query < Event
 end
 
-class BaixaUsuari < DomainEvent
+class ConsultaTractaments < Query
 attributes
-	contrasenya : String
+    answer: Set(String)
 operations
-	effect()
+    effect()
+	begin
+		self.answer:=self.pacient.tractament->collect(p| p.nom)->asSet
+	end
 end
 
-association Elimina between
-	BaixaUsuari [0..1] role baixaUsuari
-	Usuari[1] role usuari
+association Consulta between
+  ConsultaTractaments[*]
+  Pacient[*]
 end
 
 -- ENUMERATIONS

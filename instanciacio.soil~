@@ -58,3 +58,143 @@
 !c1.contrasenya := 'abcdefg1234'
 !c1.dataDeAlta := d1
 !c1.estaConectat := true
+!destroy d4; destroy p1; destroy d6; destroy m1; destroy d1; destroy d2; destroy c1; destroy d3
+!new Date('d1')
+!new Date('d2')
+!new Date('d3')
+!new Date('d4')
+!new Date('d5')
+!d1.dia := 1
+!d1.mes := 1
+!d1.any := 2016
+!d1.hora := 10
+!d1.minut := 0
+!d1.segon := 0
+!d2.dia := 2
+!d2.mes := 1
+!d2.any := 2016
+!d2.hora := 11
+!d2.minut := 0
+!d2.segon := 0
+!d3.dia := 1
+!d3.mes := 2
+!d3.any := 2016
+!d3.hora := 12
+!d3.minut := 30
+!d3.segon := 0
+!d4.dia := 1
+!d4.mes := 1
+!d4.any := 2017
+!d4.hora := 12
+!d4.minut := 0
+!d4.segon := 0
+!d5.dia := 5
+!d5.mes := 2
+!d5.any := 2016
+!d5.hora := 15
+!d5.minut := 0
+!d5.segon := 0
+!new Cuidador('c1')
+!new Metge('m1')
+!new Pacient('p1')
+!p1.dataDeAlta := d1
+!p1.estaConectat := true
+!p1.estaSubscrit := true
+!p1.dataDeUltimPagament := d1
+!p1.dataDeCaducitatDelServei := d4
+!p1.dni := '12345678A'
+!p1.email := 'pacient@tincpupa.com'
+!p1.nom := 'Pepito'
+!p1.contrasenya := 'hipocondriac1234'
+!p1.numeroDeCompteBancari := '2193483212'
+!p1.urlDeICal := 'url.de.cal'
+!p1.clauDeAutentificacioGoogle := 'causa812384'
+!c1.dni := '87654321Z'
+!c1.email := 'cuidador@noempaguen.com'
+!c1.nom := 'Mariano'
+!c1.contrasenya := 'abcdefg1234'
+!c1.dataDeAlta := d1
+!new Farmacia('f1')
+!new Promocio('pr1')
+!m1.dni := '55555555A'
+!m1.email := 'metge@amiempaguenperopoc.com'
+!m1.nom := 'Sr. Metge'
+!m1.contrasenya := 'heestudiatmoltperseraqui'
+!m1.dataDeAlta := d1
+!m1.estaConectat := false
+!m1.identificacioSanitaria := 1235456855
+!insert (f1,pr1) into Ofereix
+!insert (p1,c1) into Seguiment
+!insert (p1,m1) into Seguiment
+!new Missatge('ms1')
+!new Missatge('ms2')
+!insert (Seguiment1,ms1) into Te
+!destroy ms2
+!ms1.cos := 'Pepito recorda la medecina'
+!ms1.data := d3
+!f1.dni := 'B324293'
+!f1.email := 'lageneralitat@noenspaga.com'
+!f1.nom := 'Farmacia Granados'
+!f1.contrasenya := '123343'
+!f1.dataDeAlta := d3
+!f1.estaConectat := true
+!f1.adreca := 'C/ Falsa 123'
+!new Apat('a1')
+!new Apat('a2')
+!a1.hora := 14
+!a1.tipus := TipusDeApat::Dinar
+!a2.hora := 21
+!a2.tipus := TipusDeApat::Sopar
+!insert (p1,a2) into Fa
+!insert (p1,a1) into Fa
+!new NotificacioDePresa('ndp1')
+!ndp1.missatge := 'Paracetamol 600'
+!ndp1.data := d5
+!ndp1.estaConfirmada := false
+!ndp1.tempsDeAjornament := 10
+!ndp1.nombreDeRecordatoris := 3
+!ndp1.nombreMaximDeRecordatoris := 3
+!new NotificacioDePresa('ndp2')
+!new NotificacioDePresa('ndp3')
+!d4.dia := 7
+!d4.mes := 2
+!d4.any := 2016
+!ndp2.missatge := 'Paracetamol 600'
+!ndp2.data := d3
+!ndp2.estaConfirmada := true
+!ndp2.tempsDeAjornament := 10
+!ndp2.nombreDeRecordatoris := 1
+!ndp2.nombreMaximDeRecordatoris := 3
+!insert (p1,ndp2) into Rep
+!insert (p1,ndp1) into Rep
+!ndp3.missatge := 'Paracetamol 600'
+!ndp3.data := d4
+!ndp3.estaConfirmada := true
+!ndp3.tempsDeAjornament := 10
+!ndp3.nombreDeRecordatoris := 2
+!ndp3.nombreMaximDeRecordatoris := 3
+!insert (p1,ndp3) into Rep
+!new Medicament('md1')
+!new Tractament('trct1')
+!md1.codi := 1233223
+!md1.nom := 'Paracetamol 600'
+!trct1.dataInici := d3
+!trct1.dataFi := d5
+!insert (p1,trct1) into Segueix
+!insert (md1,trct1) into Medicacio
+!Medicacio1.periodicitat := 8
+!Medicacio1.dosiEnMG := 600
+!insert (md1,p1) into Stock
+!Stock1.quantitat := 10
+!f1.contrasenya := '123334343'
+!insert (c1,ms1) into Envia
+!c1.estaConectat := true
+!pr1.nom := 'Paracetamol 50%'
+!pr1.dataDeInici := d5
+!pr1.dataDeFi := d4
+!new Tractament('tr2')
+!tr2.dataInici := d3
+!tr2.dataFi := d4
+!insert (md1,tr2) into Medicacio
+!insert (p1,tr2) into Segueix
+!destroy tr2

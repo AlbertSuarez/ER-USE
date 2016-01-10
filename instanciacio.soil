@@ -178,6 +178,7 @@
 !new Tractament('trct1')
 !md1.codi := 1233223
 !md1.nom := 'Paracetamol 600'
+!trct1.nom := 'Tractament per migranyes'
 !trct1.dataInici := d3
 !trct1.dataFi := d5
 !insert (p1,trct1) into Segueix

@@ -137,7 +137,7 @@ operations
 	effect()
 end
 
-associtation Elimina between
+association Elimina between
 	BaixaUsuari [0..1] role baixaUsuari
 	Usuari[1] role usuari
 end
