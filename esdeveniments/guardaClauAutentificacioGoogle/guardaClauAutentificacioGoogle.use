@@ -68,6 +68,7 @@ end
 
 class GuardaClauAutentificacioGoogle < DomainEvent
 attributes
+	novaClau: String
 operations
 	effect()
 end
