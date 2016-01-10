@@ -56,8 +56,8 @@ end
 class Tractament
 attributes
 	nom : String
-	dataInici : Date
-	dataFi : Date
+	dataDeInici : Date
+	dataDeFi : Date
 end
 
 abstract class Usuari
